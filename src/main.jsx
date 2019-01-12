@@ -45,7 +45,7 @@ const Main = ({ data }) => {
   return <div class="Main">{section}</div>
 }
 
-uibench.init('Solid', '0.3.5');
+uibench.init('Solid', '0.3.6');
 const [state, setState] = useState({});
 root(() => document.querySelector('#App').appendChild(<Main data={state} />))
 
