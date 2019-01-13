@@ -1,41 +1,45 @@
 import { root, useState, reconcile, sample } from 'solid-js';
 import { r } from 'solid-js/dom';
 
-const TableCell = ({ text }) => <td class="TableCell" model={ text } textContent={ text } />;
-
-const TableRow = ({ data }) =>
-  <tr class={(data.active ? 'TableRow active' : 'TableRow')} data-id={data.id}>
-    <TableCell text={'#' + data.id}></TableCell>
-    {data.props.map(c => <TableCell text={c}></TableCell>)}
-  </tr>
-
-const Table = ({ data }) => {
-  function onClick(e, text) {
-    console.log('Clicked' + text);
-    e.stopPropagation();
-  }
+const Table = ({data}) => {
+  const onClick = (e, text) => {
+      console.log('Clicked' + text);
+      e.stopPropagation();
+    },
+    cells = row => {
+      const children = new Array(row.props.length + 1);
+      children[0] = <td class="TableCell" textContent={'#' + row.id}/>
+      for (let i = 1, len = children.length; i < len; i++) {
+        const text = row.props[i - 1];
+        children[i] = <td class="TableCell" model={text} textContent={text}/>
+      }
+      return children;
+    }
 
   return <table class="Table"><tbody onClick={onClick}>
-    <$ each={data.items}>{i => <TableRow data={i} />}</$>
+    <$ each={data.items}>{row =>
+      <tr class={(row.active ? 'TableRow active' : 'TableRow')} data-id={row.id}>{cells(row)}</tr>
+    }</$>
   </tbody></table>;
 }
 
-const AnimBox = ({ data }) => <div class="AnimBox" data-id={data.id} style={({
-  borderRadius: (data.time % 10).toString() + 'px',
-  background: 'rgba(0,0,0,' + (0.5 + ((data.time % 10) / 10)).toString() + ')'
-})} />;
+const Anim = ({data}) =>
+  <div class="Anim"><$ each={data.items}>{box =>
+    <div class="AnimBox" data-id={box.id} style={({
+      borderRadius: (box.time % 10).toString() + 'px',
+      background: 'rgba(0,0,0,' + (0.5 + ((box.time % 10) / 10)).toString() + ')'
+    })} />
+  }</$></div>;
 
-const Anim = ({ data }) => <div class="Anim"><$ each={ data.items }>{i => <AnimBox data={i} />}</$></div>;
-
-const TreeLeaf = ({ data }) => <li class="TreeLeaf">{ data.id }</li>;
-
-const TreeNode = ({ data }) => <ul class="TreeNode">
-  <$ each={ data.children }>{c => c.container ? <TreeNode data={c}/> : <TreeLeaf data={c} />}</$>
+const TreeNode = ({data}) => <ul class="TreeNode">
+  <$ each={data.children}>{node =>
+    node.container ? <TreeNode data={node}/> : <li class="TreeLeaf" textContent={node.id}/>
+  }</$>
 </ul>;
 
-const Tree = ({ data }) => <div class="Tree"><TreeNode data={data.root} /></div>;
+const Tree = ({data}) => <div class="Tree"><TreeNode data={data.root}/></div>;
 
-const Main = ({ data }) => {
+const Main = ({data}) => {
   const section = () => {
     const location = data.location;
     return sample(() => {
