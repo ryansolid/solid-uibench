@@ -1,14 +1,7 @@
-import { root, useState, reconcile } from 'solid-js';
+import { root, useState, reconcile, sample } from 'solid-js';
 import { r } from 'solid-js/dom';
 
-const TableCell = ({ text }) => {
-  function onClick(e) {
-    console.log('Clicked' + text);
-    e.stopPropagation();
-  }
-
-  return <td class="TableCell" onClick={onClick}>{text}</td>;
-}
+const TableCell = ({ text }) => <td class="TableCell" model={ text } textContent={ text } />;
 
 const TableRow = ({ data }) =>
   <tr class={(data.active ? 'TableRow active' : 'TableRow')} data-id={data.id}>
@@ -16,9 +9,16 @@ const TableRow = ({ data }) =>
     {data.props.map(c => <TableCell text={c}></TableCell>)}
   </tr>
 
-const Table = ({ data }) => <table class="Table"><tbody>
-  <$ each={data.items}>{i => <TableRow data={i} />}</$>
-</tbody></table>;
+const Table = ({ data }) => {
+  function onClick(e, text) {
+    console.log('Clicked' + text);
+    e.stopPropagation();
+  }
+
+  return <table class="Table"><tbody onClick={onClick}>
+    <$ each={data.items}>{i => <TableRow data={i} />}</$>
+  </tbody></table>;
+}
 
 const AnimBox = ({ data }) => <div class="AnimBox" data-id={data.id} style={({
   borderRadius: (data.time % 10).toString() + 'px',
@@ -38,9 +38,11 @@ const Tree = ({ data }) => <div class="Tree"><TreeNode data={data.root} /></div>
 const Main = ({ data }) => {
   const section = () => {
     const location = data.location;
-    if (location === 'table') return <Table data={data.table} />;
-    if (location === 'anim') return <Anim data={data.anim} />;
-    if (location === 'tree') return <Tree data={data.tree} />;
+    return sample(() => {
+      if (location === 'table') return <Table data={data.table} />;
+      if (location === 'anim') return <Anim data={data.anim} />;
+      if (location === 'tree') return <Tree data={data.tree} />;
+    })
   }
   return <div class="Main">{section}</div>
 }
