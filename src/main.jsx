@@ -1,4 +1,4 @@
-import { root, useState, reconcile, sample } from 'solid-js';
+import { createRoot, createState, reconcile, sample } from 'solid-js';
 import { r } from 'solid-js/dom';
 
 const Table = ({data}) => {
@@ -11,12 +11,12 @@ const Table = ({data}) => {
       children[0] = <td class="TableCell" textContent={'#' + row.id}/>
       for (let i = 1, len = children.length; i < len; i++) {
         const text = row.props[i - 1];
-        children[i] = <td class="TableCell" model={text} textContent={text}/>
+        children[i] = <td class="TableCell" model={text} onClick={onClick} textContent={text}/>
       }
       return children;
     }
 
-  return <table class="Table"><tbody onClick={onClick}>
+  return <table class="Table"><tbody>
     <$ each={data.items}>{row =>
       <tr class={(row.active ? 'TableRow active' : 'TableRow')} data-id={row.id}>{cells(row)}</tr>
     }</$>
@@ -51,9 +51,9 @@ const Main = ({data}) => {
   return <div class="Main">{section}</div>
 }
 
-uibench.init('Solid', '0.3.6');
-const [state, setState] = useState({});
-root(() => document.querySelector('#App').appendChild(<Main data={state} />))
+uibench.init('Solid', '0.4.0');
+const [state, setState] = createState();
+createRoot(() => document.querySelector('#App').appendChild(<Main data={state} />))
 
 document.addEventListener('DOMContentLoaded', function (e) {
   uibench.run(
