@@ -51,7 +51,7 @@ const Main = ({data}) => {
   return <div class="Main">{section}</div>
 }
 
-uibench.init('Solid', '0.4.0');
+uibench.init('Solid', '0.4.2');
 const [state, setState] = createState();
 createRoot(() => document.querySelector('#App').appendChild(<Main data={state} />))
 
