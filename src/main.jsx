@@ -1,5 +1,4 @@
 import { createRoot, createState, reconcile, sample } from 'solid-js';
-import { r } from 'solid-js/dom';
 
 const Table = ({data}) => {
   const onClick = (e, text) => {
@@ -51,7 +50,7 @@ const Main = ({data}) => {
   return <div class="Main">{section}</div>
 }
 
-uibench.init('Solid', '0.5.0');
+uibench.init('Solid', '0.6.1');
 const [state, setState] = createState();
 createRoot(() => document.querySelector('#App').appendChild(<Main data={state} />))
 
