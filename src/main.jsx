@@ -16,24 +16,24 @@ const Table = ({data}) => {
     }
 
   return <table class="Table"><tbody>
-    <$ each={data.items}>{row =>
+    <For each={(data.items)}>{row =>
       <tr class={(row.active ? 'TableRow active' : 'TableRow')} data-id={row.id}>{cells(row)}</tr>
-    }</$>
+    }</For>
   </tbody></table>;
 }
 
 const Anim = ({data}) =>
-  <div class="Anim"><$ each={data.items}>{box =>
+  <div class="Anim"><For each={(data.items)}>{box =>
     <div class="AnimBox" data-id={box.id} style={({
       borderRadius: (box.time % 10).toString() + 'px',
       background: 'rgba(0,0,0,' + (0.5 + ((box.time % 10) / 10)).toString() + ')'
     })} />
-  }</$></div>;
+  }</For></div>;
 
 const TreeNode = ({data}) => <ul class="TreeNode">
-  <$ each={data.children}>{node =>
+  <For each={(data.children)}>{node =>
     node.container ? <TreeNode data={node}/> : <li class="TreeLeaf" textContent={node.id}/>
-  }</$>
+  }</For>
 </ul>;
 
 const Tree = ({data}) => <div class="Tree"><TreeNode data={data.root}/></div>;
@@ -50,7 +50,7 @@ const Main = ({data}) => {
   return <div class="Main">{section}</div>
 }
 
-uibench.init('Solid', '0.8.0');
+uibench.init('Solid', '0.9.0');
 const [state, setState] = createState();
 createRoot(() => document.querySelector('#App').appendChild(<Main data={state} />))
 
