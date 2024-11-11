@@ -2,6 +2,7 @@
   "name": "solid-uibench",
   "version": "0.0.4",
   "description": "Solid implementation of uibench",
+  "type": "module",
   "scripts": {
     "build": "rollup -c",
     "prepublishOnly": "npm run build"
@@ -19,12 +20,12 @@
     "url": "https://github.com/ryansolid/solid-uibench.git"
   },
   "devDependencies": {
-    "@babel/core": "7.6.2",
-    "babel-preset-solid": "0.1.1",
-    "rollup": "1.21.4",
-    "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-node-resolve": "5.2.0",
-    "rollup-plugin-terser": "5.1.2",
-    "solid-js": "0.11.0"
+    "@babel/core": "7.26.0",
+    "babel-preset-solid": "1.9.3",
+    "rollup": "4.25.0",
+    "@rollup/plugin-babel": "6.0.4",
+    "@rollup/plugin-node-resolve": "15.3.0",
+    "@rollup/plugin-terser": "0.4.4",
+    "solid-js": "1.9.3"
   }
 }
