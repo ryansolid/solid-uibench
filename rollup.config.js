@@ -18,6 +18,6 @@ export default {
       presets: ['solid']
     }),
     resolve({ extensions: ['.js', '.jsx'] }),
-		production && terser()
+		// production && terser()
   ]
 };
