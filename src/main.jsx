@@ -57,14 +57,13 @@ const Main = props => {
 }
 
 
-uibench.init('Solid', '1.9.3');
+uibench.init('Solid', '1.9.0');
 const [state, setState] = createStore();
 createRoot(() => document.querySelector('#App').appendChild(<Main data={state} />))
 
 document.addEventListener('DOMContentLoaded', function (e) {
   uibench.run(
-    (s, stage) => {
-      if (stage === 'init') s =  { ...s, tree: JSON.parse(JSON.stringify(s.tree)) };
+    (s) => {
       setState(reconcile(s));
     },
     samples => {
