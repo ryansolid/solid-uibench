@@ -1,5 +1,6 @@
-import { createRoot } from 'solid-js';
-import { createStore, reconcile } from 'solid-js/store';
+import { createRoot, flushSync } from './x';
+import { createStore } from './x';
+import { reconcile } from './reconcile';
 
 const Table = props => {
   let rowId, children;
@@ -19,9 +20,9 @@ const Table = props => {
 
     return <table class="Table"><tbody>
     <For each={props.data.items}>{row => (
-      (rowId = row.id),
-      (children = cells(row)),
-      (<tr class={row.active ? 'TableRow active' : 'TableRow'} data-id={rowId}>{children}</tr>)
+      (rowId = row().id),
+      (children = cells(row())),
+      (<tr class={row().active ? 'TableRow active' : 'TableRow'} data-id={rowId}>{children}</tr>)
     )}</For>
   </tbody></table>;
 }
@@ -29,18 +30,19 @@ const Table = props => {
 const Anim = props => {
   let boxId;
   return <div class="Anim"><For each={props.data.items}>{box => (
-    (boxId = box.id),
+    (boxId = box().id),
     <div class="AnimBox" data-id={boxId} style={({
-      "border-radius": (box.time % 10).toString() + 'px',
-      background: 'rgba(0,0,0,' + (0.5 + ((box.time % 10) / 10)).toString() + ')'
+      "border-radius": (box().time % 10).toString() + 'px',
+      background: 'rgba(0,0,0,' + (0.5 + ((box().time % 10) / 10)).toString() + ')'
     })} />
   )}</For></div>
 }
 
 const TreeNode = (props) => <ul class="TreeNode">
   <For each={props.data.children}>{node => {
-    const nodeId = node.id;
-    return node.container ? <TreeNode data={node}/> : <li class="TreeLeaf" textContent={nodeId}/>
+    const n = node();
+    const { id, container } = n;
+    return container ? <TreeNode data={n}/> : <li class="TreeLeaf" textContent={id}/>
   }}</For>
 </ul>;
 
@@ -57,18 +59,22 @@ const Main = props => {
 }
 
 
-uibench.init('Solid', '1.9.0');
-const [state, setState] = createStore();
+uibench.init('Solid', 'X Reconcile');
+const [state, setState] = createStore({});
 createRoot(() => document.querySelector('#App').appendChild(<Main data={state} />))
 
 document.addEventListener('DOMContentLoaded', function (e) {
   uibench.run(
-    (s) => {
-      setState(reconcile(s));
+    v => {
+      setState(s => {
+        reconcile(v, s, { merge: true });
+      });
+      flushSync();
     },
     samples => {
       document.body.textContent = '';
       document.body.appendChild(<pre>{JSON.stringify(samples, null, ' ')}</pre>);
+      flushSync();
     }
   );
 });

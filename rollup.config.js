@@ -15,7 +15,7 @@ export default {
 		babel({
       exclude: 'node_modules/**',
 			babelHelpers: "bundled",
-      presets: ['solid']
+      presets: [["solid", { moduleName: "./x" }]]
     }),
     resolve({ extensions: ['.js', '.jsx'] }),
 		// production && terser()
