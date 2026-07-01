@@ -5,19 +5,19 @@ import terser from '@rollup/plugin-terser';
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-	input: 'src/main.jsx',
-	output: {
-		// sourcemap: true,
-		format: 'iife',
-		file: 'dist/main.js',
-	},
-	plugins: [
-		babel({
+  input: 'src/main.jsx',
+  output: {
+    // sourcemap: true,
+    format: 'iife',
+    file: 'dist/main.js',
+  },
+  plugins: [
+    babel({
       exclude: 'node_modules/**',
-			babelHelpers: "bundled",
-      presets: [["solid", { moduleName: "./x" }]]
+      babelHelpers: 'bundled',
+      presets: [['solid', {}]]
     }),
     resolve({ extensions: ['.js', '.jsx'] }),
-		// production && terser()
+    // production && terser()
   ]
 };
